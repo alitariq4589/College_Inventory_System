@@ -18,11 +18,11 @@ struct Inventory {
 fn main() {
     let inventory: &mut Vec<Inventory> = &mut Vec::new();
     update_inventory(inventory);
-    update_file(inventory);
-    // menu();
+    // update_file(inventory);
+    menu(inventory);
 }
 
-fn menu() {
+fn menu(inv: &mut Vec<Inventory>) {
     let mut option = String::new();
 
     println!("---- Faculty Inventory System ----");
@@ -39,30 +39,33 @@ fn menu() {
 
     print!("Enter option number: ");
     io::stdout().flush().expect("Could not flush stdout");
-    io::stdin().read_line(&mut option).expect("Could not get user input");
+    io::stdin()
+        .read_line(&mut option)
+        .expect("Could not get user input");
 
     // println!("The value of option is: {}", option);
 
-    if option.trim() == "a" {
-        menu();
+    if option.trim() == "1" {
+        add_item(inv);
+        menu(inv);
     } else if option.trim() == "2" {
-        menu();
+        menu(inv);
     } else if option.trim() == "3" {
-        menu();
+        menu(inv);
     } else if option.trim() == "4" {
-        menu();
+        menu(inv);
     } else if option.trim() == "5" {
-        menu();
+        menu(inv);
     } else if option.trim() == "6" {
-        menu();
+        menu(inv);
     } else if option.trim() == "7" {
-        menu();
+        menu(inv);
     } else if option.trim() == "8" {
-        menu();
+        menu(inv);
     } else {
         println!("\n[Error]: You did not enter a correct option !\n");
         thread::sleep(Duration::from_secs(2));
-        menu();
+        menu(inv);
     }
 }
 
@@ -141,8 +144,8 @@ fn update_file(inv: &mut Vec<Inventory>) {
         let size = i.allocated_to.len();
         for j in 0..size {
             write!(f, "{}", i.allocated_to[j].to_string()).expect("Error appending the file");
-            if j != size-1{
-            write!(f, "|").expect("Error appending the file");
+            if j != size - 1 {
+                write!(f, "|").expect("Error appending the file");
             }
         }
         // write!(f, "wat\u00000008wat").expect("Error appending the file");
@@ -158,19 +161,27 @@ fn add_item(inv: &mut Vec<Inventory>) {
 
     print!("\nEnter name of item: ");
     io::stdout().flush().expect("Could not flush stdout");
-    io::stdin().read_line(item_name).expect("Could not read user input");
+    io::stdin()
+        .read_line(item_name)
+        .expect("Could not read user input");
 
     print!("\nEnter item category: ");
     io::stdout().flush().expect("Could not flush stdout");
-    io::stdin().read_line(item_category).expect("Could not read user input");
+    io::stdin()
+        .read_line(item_category)
+        .expect("Could not read user input");
 
     print!("\nEnter item count: ");
     io::stdout().flush().expect("Could not flush stdout");
-    io::stdin().read_line(item_count).expect("Could not read user input");
+    io::stdin()
+        .read_line(item_count)
+        .expect("Could not read user input");
 
     print!("\nEnter item ID: ");
     io::stdout().flush().expect("Could not flush stdout");
-    io::stdin().read_line(item_id).expect("Could not read user input");
+    io::stdin()
+        .read_line(item_id)
+        .expect("Could not read user input");
 
     inv.push(Inventory {
         name: item_name.to_string(),
