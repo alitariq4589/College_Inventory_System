@@ -18,7 +18,8 @@ struct Inventory {
 fn main() {
     let inventory: &mut Vec<Inventory> = &mut Vec::new();
     update_inventory(inventory);
-    view_item(inventory);
+    // view_item(inventory);
+    search_item(inventory);
     // update_file(inventory);
     // menu(inventory);
 }
@@ -195,15 +196,44 @@ fn add_item(inv: &mut Vec<Inventory>) {
     update_file(inv);
 }
 
-fn view_item (inv: &mut Vec<Inventory>){
-    for i in inv.iter(){
-        print!("{}\t",i.name.to_string());
-        print!("{}\t",i.item_id);
-        print!("{}\t",i.category);
-        print!("{}\t",i.item_count);
-        for j in i.allocated_to.iter(){
-            print!("{}\t",j);
+fn view_item(inv: &mut Vec<Inventory>) {
+    for i in inv.iter() {
+        print!("{}\t", i.name.to_string());
+        print!("{}\t", i.item_id);
+        print!("{}\t", i.category);
+        print!("{}\t", i.item_count);
+        for j in i.allocated_to.iter() {
+            print!("{}\t", j);
         }
         println!();
+    }
+}
+
+fn search_item(inv: &mut Vec<Inventory>) {
+    let mut is_found = false;
+    let item_name: &mut String = &mut String::new();
+
+    print!("Enter the name of the item to search: ");
+    io::stdout().flush().expect("Failed to flush stdout");
+    io::stdin()
+        .read_line(item_name)
+        .expect("Could not read user input");
+
+    for i in inv.iter() {
+        if item_name.to_string().trim() == i.name.to_string().trim() {
+            print!("{}\t", i.name.to_string());
+            print!("{}\t", i.item_id);
+            print!("{}\t", i.category);
+            print!("{}\t", i.item_count);
+            for j in i.allocated_to.iter() {
+                print!("{}\t", j);
+            }
+            println!();
+            is_found=true;
+            break;
+        }
+    }
+    if !is_found {
+        println!("Item not found !");
     }
 }
