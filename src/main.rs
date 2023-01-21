@@ -1,3 +1,4 @@
+#![allow(non_snake_case)] //For allowing non-snake Case naming convention e.g. IsDone
 use std::fs;
 use std::fs::File;
 // use std::fs::OpenOptions;
@@ -19,7 +20,8 @@ fn main() {
     let inventory: &mut Vec<Inventory> = &mut Vec::new();
     update_inventory(inventory);
     // update_file(inventory);
-    menu(inventory);
+    // menu(inventory);
+    delete_item(inventory);
 }
 
 fn menu(inv: &mut Vec<Inventory>) -> u32 {
@@ -232,4 +234,25 @@ fn search_item(inv: &mut Vec<Inventory>) {
     if !is_found {
         println!("Item not found !");
     }
+}
+
+fn delete_item(inv: &mut Vec<Inventory>){
+    view_item(inv);
+
+    let item_name:&mut String=&mut String::new();
+
+    print!("Enter the name of item you want to delete: ");
+    io::stdout().flush().expect("Error flushing stdout");
+
+    io::stdin()
+        .read_line(item_name)
+        .expect("[Error]: Could not read user input !");
+
+    for i in 0..inv.len(){
+        if item_name.to_string().trim() == inv[i].name.to_string().trim(){
+            inv.remove(i);
+            break;
+        }
+    }
+    update_file(inv);
 }
