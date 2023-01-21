@@ -18,10 +18,8 @@ struct Inventory {
 fn main() {
     let inventory: &mut Vec<Inventory> = &mut Vec::new();
     update_inventory(inventory);
-    // view_item(inventory);
-    search_item(inventory);
     // update_file(inventory);
-    // menu(inventory);
+    menu(inventory);
 }
 
 fn menu(inv: &mut Vec<Inventory>) -> u32 {
@@ -29,47 +27,45 @@ fn menu(inv: &mut Vec<Inventory>) -> u32 {
 
     println!("---- Faculty Inventory System ----");
     println!("Select an option from one of the following:");
+    while option.to_string().trim() != "0" {
+        println!("1. Add inventory items");
+        println!("2. View all inventory items");
+        println!("3. Search inventory items");
+        println!("4. Edit inventory items");
+        println!("5. Delete inventory items");
+        println!("6. Assign inventory items");
+        println!("7. Retrieve inventory items");
+        println!("8. View list of members with specific inventory items");
+        println!("0. Exit\n");
 
-    println!("1. Add inventory items");
-    println!("2. View all inventory items");
-    println!("3. Search inventory items");
-    println!("4. Edit inventory items");
-    println!("5. Delete inventory items");
-    println!("6. Assign inventory items");
-    println!("7. Retrieve inventory items");
-    println!("8. View list of members with specific inventory items\n");
+        print!("Enter option number: ");
+        io::stdout().flush().expect("Could not flush stdout");
+        io::stdin()
+            .read_line(&mut option)
+            .expect("Could not get user input");
 
-    print!("Enter option number: ");
-    io::stdout().flush().expect("Could not flush stdout");
-    io::stdin()
-        .read_line(&mut option)
-        .expect("Could not get user input");
+        // println!("The value of option is: {}", option);
 
-    // println!("The value of option is: {}", option);
-
-    if option.trim() == "1" {
-        add_item(inv);
-        menu(inv);
-    } else if option.trim() == "2" {
-        menu(inv);
-    } else if option.trim() == "3" {
-        menu(inv);
-    } else if option.trim() == "4" {
-        menu(inv);
-    } else if option.trim() == "5" {
-        menu(inv);
-    } else if option.trim() == "6" {
-        menu(inv);
-    } else if option.trim() == "7" {
-        menu(inv);
-    } else if option.trim() == "8" {
-        menu(inv);
-    } else {
-        println!("\n[Error]: You did not enter a correct option !\n");
-        thread::sleep(Duration::from_secs(2));
-        menu(inv);
+        if option.trim() == "1" {
+            add_item(inv);
+        } else if option.trim() == "2" {
+            view_item(inv);
+        } else if option.trim() == "3" {
+            search_item(inv);
+        } else if option.trim() == "4" {
+        } else if option.trim() == "5" {
+        } else if option.trim() == "6" {
+        } else if option.trim() == "7" {
+        } else if option.trim() == "8" {
+        } else if option.trim() == "0" {
+            println!("\n[INFO]: Good Bye !\n");
+            thread::sleep(Duration::from_secs(2));
+        } else {
+            println!("\n[Error]: You did not enter a correct option !\n");
+            thread::sleep(Duration::from_secs(2));
+        }
     }
-    return 3;
+    return 0;
 }
 
 fn update_inventory(inv: &mut Vec<Inventory>) {
@@ -136,17 +132,17 @@ fn update_file(inv: &mut Vec<Inventory>) {
         .unwrap();
 
     for i in inv {
-        write!(f, "{}", i.name.to_string()).expect("Error appending the file");
+        write!(f, "{}", i.name.to_string().trim()).expect("Error appending the file");
         write!(f, ",").expect("Error appending the file");
-        write!(f, "{}", i.item_id.to_string()).expect("Error appending the file");
+        write!(f, "{}", i.item_id.to_string().trim()).expect("Error appending the file");
         write!(f, ",").expect("Error appending the file");
-        write!(f, "{}", i.category.to_string()).expect("Error appending the file");
+        write!(f, "{}", i.category.to_string().trim()).expect("Error appending the file");
         write!(f, ",").expect("Error appending the file");
-        write!(f, "{}", i.item_count.to_string()).expect("Error appending the file");
+        write!(f, "{}", i.item_count.to_string().trim()).expect("Error appending the file");
         write!(f, ",").expect("Error appending the file");
         let size = i.allocated_to.len();
         for j in 0..size {
-            write!(f, "{}", i.allocated_to[j].to_string()).expect("Error appending the file");
+            write!(f, "{}", i.allocated_to[j].to_string().trim()).expect("Error appending the file");
             if j != size - 1 {
                 write!(f, "|").expect("Error appending the file");
             }
@@ -229,7 +225,7 @@ fn search_item(inv: &mut Vec<Inventory>) {
                 print!("{}\t", j);
             }
             println!();
-            is_found=true;
+            is_found = true;
             break;
         }
     }
