@@ -18,11 +18,12 @@ struct Inventory {
 fn main() {
     let inventory: &mut Vec<Inventory> = &mut Vec::new();
     update_inventory(inventory);
+    view_item(inventory);
     // update_file(inventory);
-    menu(inventory);
+    // menu(inventory);
 }
 
-fn menu(inv: &mut Vec<Inventory>) {
+fn menu(inv: &mut Vec<Inventory>) -> u32 {
     let mut option = String::new();
 
     println!("---- Faculty Inventory System ----");
@@ -67,6 +68,7 @@ fn menu(inv: &mut Vec<Inventory>) {
         thread::sleep(Duration::from_secs(2));
         menu(inv);
     }
+    return 3;
 }
 
 fn update_inventory(inv: &mut Vec<Inventory>) {
@@ -191,4 +193,17 @@ fn add_item(inv: &mut Vec<Inventory>) {
         allocated_to: Vec::new(),
     });
     update_file(inv);
+}
+
+fn view_item (inv: &mut Vec<Inventory>){
+    for i in inv.iter(){
+        print!("{}\t",i.name.to_string());
+        print!("{}\t",i.item_id);
+        print!("{}\t",i.category);
+        print!("{}\t",i.item_count);
+        for j in i.allocated_to.iter(){
+            print!("{}\t",j);
+        }
+        println!();
+    }
 }
