@@ -2,4 +2,5 @@ Printer,1,Machines,9,Ali Raza|Ali Imran|Hamza Kha
 Marker,2,Stationary,2,Hassan Ashfaq|Hamza Khan
 Duster,3,Stationary,3,Nouman Farooq|Hassan Ashraf
 Proj,55,Machines,5,Ali Tariq|Ali Raza
-new_item,50,new_category,45,
+new_item,50,new_category,44,|Ali Tariq
+new_item1,53,new_category,49,|ALi Tariq
