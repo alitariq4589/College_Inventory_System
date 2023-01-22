@@ -2,7 +2,7 @@
 use std::fs;
 use std::fs::File;
 // use std::fs::OpenOptions;
-use std::io; //For standard input
+use std::io::{self, Read}; //For standard input
 use std::io::{BufRead, Write}; //For standard output
 use std::path::Path; //For path of file
 use std::thread; //For introducing delays
@@ -20,14 +20,13 @@ fn main() {
     let inventory: &mut Vec<Inventory> = &mut Vec::new();
     update_inventory(inventory);
     // update_file(inventory);
-    menu(inventory);
+    // menu(inventory);
     // delete_item(inventory);
-
+    view_member(inventory);
 }
 
 fn menu(inv: &mut Vec<Inventory>) -> u32 {
-    let option:&mut String = &mut String::new();
-
+    let option: &mut String = &mut String::new();
 
     println!("---- Faculty Inventory System ----");
     println!("Select an option from one of the following:");
@@ -51,7 +50,7 @@ fn menu(inv: &mut Vec<Inventory>) -> u32 {
 
         // println!("The value of option is: {}", option);
 
-        println!("You entered option: {}",option);
+        println!("You entered option: {}", option);
         if option.trim() == "1" {
             add_item(inv);
         } else if option.trim() == "2" {
@@ -63,7 +62,6 @@ fn menu(inv: &mut Vec<Inventory>) -> u32 {
             delete_item(inv);
         } else if option.to_string().trim() == "6" {
             assign_item(inv);
-
         } else if option.trim() == "7" {
         } else if option.trim() == "8" {
         } else if option.trim() == "0" {
@@ -151,7 +149,8 @@ fn update_file(inv: &mut Vec<Inventory>) {
         write!(f, ",").expect("Error appending the file");
         let size = i.allocated_to.len();
         for j in 0..size {
-            write!(f, "{}", i.allocated_to[j].to_string().trim()).expect("Error appending the file");
+            write!(f, "{}", i.allocated_to[j].to_string().trim())
+                .expect("Error appending the file");
             if j != size - 1 {
                 write!(f, "|").expect("Error appending the file");
             }
@@ -242,10 +241,10 @@ fn search_item(inv: &mut Vec<Inventory>) {
     }
 }
 
-fn delete_item(inv: &mut Vec<Inventory>){
+fn delete_item(inv: &mut Vec<Inventory>) {
     view_item(inv);
 
-    let item_name:&mut String=&mut String::new();
+    let item_name: &mut String = &mut String::new();
 
     print!("Enter the name of item you want to delete: ");
     io::stdout().flush().expect("Error flushing stdout");
@@ -254,8 +253,8 @@ fn delete_item(inv: &mut Vec<Inventory>){
         .read_line(item_name)
         .expect("[Error]: Could not read user input !");
 
-    for i in 0..inv.len(){
-        if item_name.to_string().trim() == inv[i].name.to_string().trim(){
+    for i in 0..inv.len() {
+        if item_name.to_string().trim() == inv[i].name.to_string().trim() {
             inv.remove(i);
             break;
         }
@@ -263,37 +262,69 @@ fn delete_item(inv: &mut Vec<Inventory>){
     update_file(inv);
 }
 
-fn assign_item(inv: &mut Vec<Inventory>){
+fn assign_item(inv: &mut Vec<Inventory>) {
     let mut is_found = false;
     view_item(inv);
 
-    let item_name:&mut String=&mut String::new();
-    let allocate_to: &mut String=&mut String::new();
-    let item_count:u32;
+    let item_name: &mut String = &mut String::new();
+    let allocate_to: &mut String = &mut String::new();
+    let item_count: u32;
 
     print!("Enter the name of item you want to assign: ");
-    io::stdout().flush().expect("[Error]: Could not flush stdout");
-    io::stdin().read_line(item_name).expect("[Error]: Could not read item_name from user !");
+    io::stdout()
+        .flush()
+        .expect("[Error]: Could not flush stdout");
+    io::stdin()
+        .read_line(item_name)
+        .expect("[Error]: Could not read item_name from user !");
 
     print!("Enter the name of person you want to assign the item to: ");
-    io::stdout().flush().expect("[Error]: Could not flush stdout");
-    io::stdin().read_line(allocate_to).expect("[Error]: Could not read allocate_to from user !");
+    io::stdout()
+        .flush()
+        .expect("[Error]: Could not flush stdout");
+    io::stdin()
+        .read_line(allocate_to)
+        .expect("[Error]: Could not read allocate_to from user !");
 
-
-    for i in 0..inv.len(){
-        if inv[i].name.to_string().trim()==item_name.to_string().trim(){
+    for i in 0..inv.len() {
+        if inv[i].name.to_string().trim() == item_name.to_string().trim() {
             println!("\n [INFO]: Found Item !\n");
-            item_count=inv[i].item_count.parse::<u32>().unwrap() - 1;
-            inv[i].item_count=item_count.to_string();
-            println!("Length before: {}",inv[i].allocated_to.len());
+            item_count = inv[i].item_count.parse::<u32>().unwrap() - 1;
+            inv[i].item_count = item_count.to_string();
+            println!("Length before: {}", inv[i].allocated_to.len());
             inv[i].allocated_to.push(allocate_to.trim().to_string());
             is_found = true;
-            println!("Length after: {}",inv[i].allocated_to.len());
+            println!("Length after: {}", inv[i].allocated_to.len());
             break;
         }
     }
-    if is_found==false{
+    if is_found == false {
         println!("[INFO]: No item found!");
     }
     update_file(inv);
+}
+
+fn view_member(inv: &mut Vec<Inventory>) {
+    let item_name: &mut String = &mut String::new();
+
+    print!("Enter the item name to view its members: ");
+    io::stdout()
+        .flush()
+        .expect("[ERROR]: Failed to flush stdout");
+
+    io::stdin()
+        .read_line(item_name)
+        .expect("[ERROR]: Error reading user input for item_name");
+
+    for i in inv.iter() {
+        if i.name.to_string().trim() == item_name.to_string().trim() {
+            println!(
+                "\nFollowing are the faculty members who borrowed {}\n",
+                item_name
+            );
+            for j in i.allocated_to.iter() {
+                println!("{}", j);
+            }
+        }
+    }
 }
