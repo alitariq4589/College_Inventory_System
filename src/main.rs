@@ -20,8 +20,8 @@ fn main() {
     let inventory: &mut Vec<Inventory> = &mut Vec::new();
     update_inventory(inventory);
     // update_file(inventory);
-    // menu(inventory);
-    retrieve_item(inventory);
+    menu(inventory);
+    // retrieve_item(inventory);
     // delete_item(inventory);
     // view_member(inventory);
     // edit_item(inventory);
@@ -53,22 +53,23 @@ fn menu(inv: &mut Vec<Inventory>) -> u32 {
         // println!("The value of option is: {}", option);
 
         println!("You entered option: {}", option);
-        if option.trim() == "1" {
+        if option.to_string().trim() == "1" {
             add_item(inv);
-        } else if option.trim() == "2" {
+        } else if option.to_string().trim() == "2" {
             view_item(inv);
-        } else if option.trim() == "3" {
+        } else if option.to_string().trim() == "3" {
             search_item(inv);
-        } else if option.trim() == "4" {
+        } else if option.to_string().trim() == "4" {
             edit_item(inv);
-        } else if option.trim() == "5" {
+        } else if option.to_string().trim() == "5" {
             delete_item(inv);
         } else if option.to_string().trim() == "6" {
             assign_item(inv);
-        } else if option.trim() == "7" {
-        } else if option.trim() == "8" {
+        } else if option.to_string().trim() == "7" {
+            retrieve_item(inv);
+        } else if option.to_string().trim() == "8" {
             view_member(inv);
-        } else if option.trim() == "0" {
+        } else if option.to_string().trim() == "0" {
             println!("\n[INFO]: Good Bye !\n");
             thread::sleep(Duration::from_secs(2));
         } else {
