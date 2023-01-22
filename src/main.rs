@@ -20,9 +20,10 @@ fn main() {
     let inventory: &mut Vec<Inventory> = &mut Vec::new();
     update_inventory(inventory);
     // update_file(inventory);
-    // menu(inventory);
+    menu(inventory);
     // delete_item(inventory);
-    view_member(inventory);
+    // view_member(inventory);
+    // edit_item(inventory);
 }
 
 fn menu(inv: &mut Vec<Inventory>) -> u32 {
@@ -327,4 +328,60 @@ fn view_member(inv: &mut Vec<Inventory>) {
             }
         }
     }
+}
+
+fn edit_item(inv: &mut Vec<Inventory>) {
+    let mut is_found=false;
+
+    let item_name: &mut String = &mut String::new();
+    let item_count: &mut String = &mut String::new();
+    let item_id: &mut String = &mut String::new();
+    let item_category: &mut String = &mut String::new();
+
+    print!("Enter name of the item which you want to edit: ");
+    io::stdout()
+        .flush()
+        .expect("[ERROR]: Error flushing stdout");
+    io::stdin()
+        .read_line(item_name)
+        .expect("Error reading item_name from user");
+
+    for i in 0..inv.len() {
+        if inv[i].name.to_string().trim() == item_name.to_string().trim() {
+            println!("\n[INFO]: Item found ! \n");
+            is_found=true;
+
+            print!("Enter item ID for item {}: ", item_name.to_string().trim());
+            io::stdout()
+                .flush()
+                .expect("[ERROR]: Error flushing stdout");
+            io::stdin()
+                .read_line(item_id)
+                .expect("Error reading item_name from user");
+            print!("Enter item count for item {}: ", item_name.to_string().trim());
+            io::stdout()
+                .flush()
+                .expect("[ERROR]: Error flushing stdout");
+            io::stdin()
+                .read_line(item_count)
+                .expect("Error reading item_name from user");
+            print!("Enter item category for item {}: ", item_name.to_string().trim());
+            io::stdout()
+                .flush()
+                .expect("[ERROR]: Error flushing stdout");
+            io::stdin()
+                .read_line(item_category)
+                .expect("Error reading item_name from user");
+
+            inv[i].item_id=item_id.to_string();
+            inv[i].item_count=item_count.to_string();
+            inv[i].category=item_category.to_string();
+            update_file(inv);
+            break;
+        }
+    }
+    if is_found==false{
+        println!("\n[ERROR]: Item not found !\n");
+    }
+
 }
